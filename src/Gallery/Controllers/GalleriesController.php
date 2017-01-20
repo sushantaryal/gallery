@@ -3,13 +3,16 @@
 namespace Taggers\Gallery\Controllers;
 
 use Image;
-use Taggers\Gallery\Models\Photo;
-use Taggers\Gallery\Models\Gallery;
 use Illuminate\Http\Request;
-use Taggers\Gallery\Controllers\Controller;
+use Taggers\Gallery\Models\Photo;
+use Illuminate\Routing\Controller;
+use Taggers\Gallery\Models\Gallery;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 
 class GalleriesController extends Controller
 {
+    use ValidatesRequests;
+
     /**
      * Display a listing of the resource.
      *
