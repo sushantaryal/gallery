@@ -143,8 +143,6 @@ class GalleriesController extends Controller
      */
     public function uploadPhotos(Request $request)
     {
-        $gallery = Gallery::find($request->input('gallery_id'));
-
         $path = 'uploads/photos/';
         $image = $request->file('file');
         $originalName = $image->getClientOriginalName();
@@ -152,24 +150,27 @@ class GalleriesController extends Controller
 
         $filename = generateFilename($path, $extension);
 
-        // Upload Original
-        $image = Image::make($image)->save($path . $filename);
-        // Upload thumbnail
-        $thumbimage = Image::make($image)->fit(500)->save($path . 'thumbs/' . $filename);
-
-        if(!$image || !$thumbimage) {
-            return response()->json([
-                'error' => true,
-                'message' => 'Server error while uploading',
-                'code' => 500
-            ], 500);
-        }
-
         $photo = Photo::create([
-            'gallery_id' => $gallery->id,
+            'gallery_id' => $request->input('gallery_id'),
             'original_name' => $originalName,
             'filename' => $filename
         ]);
+
+        if ($photo) {
+            // Upload Original
+            $image = Image::make($image)->save($path . $filename);
+            // Upload thumbnail
+            $thumbimage = Image::make($image)->fit(500)->save($path . 'thumbs/' . $filename);
+
+            if(!$image || !$thumbimage) {
+                $photo->delete();
+                return response()->json([
+                    'error' => true,
+                    'message' => 'Server error while uploading',
+                    'code' => 500
+                ], 500);
+            }
+        }
 
         return response()->json([
             'error' => false,
