@@ -20,7 +20,7 @@ class GalleriesController extends Controller
      */
     public function index()
     {
-        $galleries = Gallery::with('photos')->get();
+        $galleries = Gallery::all();
 
         return view('gallery::galleries.index', compact('galleries'));
     }

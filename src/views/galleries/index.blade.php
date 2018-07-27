@@ -31,7 +31,7 @@
                     <tbody>
                         @foreach($galleries as $gallery)
                             <tr>
-                                <td>{{ $gallery->title }} ({{ $gallery->photos->count() }})</td>
+                                <td>{{ $gallery->title }} ({{ $gallery->photos()->count() }})</td>
                                 <td>{!! $gallery->statusString() !!}</td>
                                 <td class="text-center">
                                     {!! Form::open(['route' => ['galleries.destroy', $gallery->id], 'method' => 'DELETE', 'data-confirm' => 'Are you sure you want to delete this gallery? All the photos in this gallery will be deleted.']) !!}
